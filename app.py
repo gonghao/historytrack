@@ -3,8 +3,7 @@
 from sqlite3 import dbapi2 as sqlite3
 from flask import Flask, g, render_template, session, request, make_response, url_for, redirect
 from jinja2 import Markup
-from time import time
-import uuid, urllib, urllib2, re
+import uuid, time, urllib, urllib2, re
 
 # configuration
 DATABASE = 'historytrack.db'
@@ -25,6 +24,10 @@ def urlencode_filter(s):
     s = urllib.quote_plus(s)
     return Markup(s)
 
+@app.template_filter('datetimeformat')
+def datetimeformat_filter(value, format='%Y年%m月%d日%H:%M'):
+    return time.strftime(format, time.localtime(value)).decode('utf-8')
+
 def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
 
@@ -39,7 +42,7 @@ def generate_user_id():
 
 def add_track_record(referrer, destination):
     g.db.execute('INSERT INTO `tracks` (`user_id`, `timestamp`, `referrer`, `destination`) VALUES (?, ?, ?, ?)',
-        [ session.get('user'), int(time()), referrer, destination ])
+        [ session.get('user'), int(time.time()), referrer, destination ])
     g.db.commit()
 
 @app.teardown_request
@@ -102,6 +105,12 @@ def link(path):
         content = content.replace('</body>', '<script src="%s"></script></body>' % url_for('static', filename='js/core.js'))
 
     return make_response(content)
+
+@app.route('/record')
+def list_records():
+    cur = g.db.execute('SELECT * FROM `tracks`')
+    tracks = [ dict(user_id=row[1], time=row[2], ref=row[3], dest=row[4]) for row in cur.fetchall() ]
+    return render_template('record.html', tracks=tracks)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

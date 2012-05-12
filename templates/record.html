@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}访问记录{% endblock title %}
+
+{% block body %}
+<section class="container">
+    <h1>访问记录</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>用户ID</th>
+                <th>访问时间</th>
+                <th>来自</th>
+                <th>前往</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if tracks|length > 0 %}
+                {% for track in tracks %}
+            <tr>
+                <td>{{ track['user_id'] }}</td>
+                <td>{{ track['time']|datetimeformat }}</td>
+                <td>{{ track['ref'] }}</td>
+                <td>{{ track['dest'] }}</td>
+            </tr>
+                {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="4">暂无记录</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</section>
+{% endblock body %}

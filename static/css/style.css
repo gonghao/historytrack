@@ -30,7 +30,7 @@ body { font: 12px/20px arial; }
 
 .link-list {
     list-style: none;
-    margin: 41px 0 0 100px;
+    margin: 41px 150px 0 100px;
 }
 
 .link-list .link-item {
@@ -60,4 +60,35 @@ body { font: 12px/20px arial; }
 .link-list .link-item > a:active,
 .link-list .link-item > a:hover {
     color: #fff;
+}
+
+.container {
+    width: 960px;
+    margin: 0 auto;
+}
+
+.site-nav {
+    position: fixed;
+    right: 50px;
+    bottom: 50px;
+    width: 80px;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.site-nav ul {
+    list-style: none;
+}
+
+.site-nav a,
+.site-nav a:link,
+.site-nav a:visited {
+    color: #aaa;
+    font-size: 18px;
+}
+
+.site-nav a:active,
+.site-nav a:hover {
+    color: #555;
+    text-decoration: none;
 }

@@ -15,5 +15,10 @@
         {% endfor %}
     --></ul>
     {% endif %}
+    <nav class="site-nav">
+        <ul>
+            <li><a href="{{ url_for('list_records') }}">访问记录</a></li>
+        </ul>
+    </nav>
     <script>setTimeout(function() { window.scrollTo(0, 1); }, 10);</script>
 {% endblock %}
