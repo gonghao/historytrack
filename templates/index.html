@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Index{% endblock title %}
+
+{% set index_links = [ ('ghSky', 'http://ghsky.com'), ('Douban', 'http://www.douban.com'), ('Weibo', 'http://weibo.cn') ] %}
+
+{% block body %}
+    <h1 class="logo"><a href="{{ url_for('index') }}">Index</a></h1>
+    {% if not index_links or index_links|length < 0 %}
+    <p>No links avaiable.</p>
+    {% else %}
+    <ul class="link-list"><!--
+        {% for link in index_links %}
+        --><li class="link-item"><a href="{{ url_for('link', path=link[1]) }}">{{ link[0] }}</a></li><!--
+        {% endfor %}
+    --></ul>
+    {% endif %}
+    <script>setTimeout(function() { window.scrollTo(0, 1); }, 10);</script>
+{% endblock %}

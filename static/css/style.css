@@ -1,0 +1,63 @@
+body, h1, ul {
+    margin: 0;
+    padding: 0;
+}
+
+body { font: 12px/20px arial; }
+
+.logo {
+    position: fixed;
+    left: -32px;
+    top: 70px;
+}
+
+.logo a {
+    display: block;
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    background: #d3351e;
+    padding: 10px 20px;
+    font-weight: normal;
+}
+
+.logo a:link, .logo a:visited, .logo a:active, .logo a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.link-list {
+    list-style: none;
+    margin: 41px 0 0 100px;
+}
+
+.link-list .link-item {
+    display: inline-block;
+    padding: 0 10px 10px 0;
+}
+
+.link-list .link-item > a {
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    background: #2ba6e9;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: hidden;
+    word-wrap: break-word;
+    padding-top: 65%;
+    font-size: 20px;
+    text-decoration: none;
+    text-shadow: 2px 1px 1px rgba(0, 0, 0, .2);
+}
+
+.link-list .link-item > a:link,
+.link-list .link-item > a:visited,
+.link-list .link-item > a:active,
+.link-list .link-item > a:hover {
+    color: #fff;
+}
