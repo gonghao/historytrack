@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from sqlite3 import dbapi2 as sqlite3
-from flask import Flask, g, render_template, session, request, make_response, url_for, redirect
+from flask import Flask, g, render_template, session, request, make_response, url_for, redirect, abort
 from jinja2 import Markup
+from urlparse import urlparse, urlunparse, urljoin
+from functools import partial
 import uuid, time, urllib, urllib2, re, sys
 
 # configuration
@@ -31,12 +33,6 @@ def datetimeformat_filter(value, format='%Y年%m月%d日%H:%M'):
 def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
 
-@app.before_request
-def before_request():
-    g.db = connect_db()
-    if not session.get('user'):
-        session['user'] = generate_user_id()
-
 def generate_user_id():
     return str(uuid.uuid4())
 
@@ -44,6 +40,20 @@ def add_track_record(referrer, destination):
     g.db.execute('INSERT INTO `tracks` (`user_id`, `timestamp`, `referrer`, `destination`) VALUES (?, ?, ?, ?)',
         [ session.get('user'), int(time.time()), referrer, destination ])
     g.db.commit()
+
+REG_SOURCE = re.compile(r'(href|src)=\s*([\'\"])([^\'\"]+)\2')
+
+def parse_source_url(m, base_url=None):
+    if base_url is None:
+        return m.group(0)
+
+    return u'{0}={1}{2}{1}'.format(m.group(1), m.group(2), urljoin(base_url, m.group(3)))
+
+@app.before_request
+def before_request():
+    g.db = connect_db()
+    if not session.get('user'):
+        session['user'] = generate_user_id()
 
 @app.teardown_request
 def teardown_request(exception):
@@ -56,6 +66,7 @@ def index():
 
 REG_CHARSET_SIMPLE = re.compile(r'<meta\s*charset\s*=\s*([\"\'])([^\"\']+)\1\s*>')
 REG_CHARSET = re.compile(r'<meta[\s\w=\"\'/;-]+charset=([^\'\"]+)')
+REG_DOMAIN = re.compile(r'\.?\w+\.\w+$')
 
 @app.route('/link/<path:path>')
 def link(path):
@@ -70,19 +81,30 @@ def link(path):
         if m:
             referrer = urllib.unquote_plus(m.group(1))
 
-    headers = request.headers
+    parsed_url = urlparse(path)
+
+    # if not REG_DOMAIN.search(parsed_url.netloc) and request.referrer:
+    #     base_path = url_for('link', path='__path__').replace('__path__', '')
+    #     base_url = urlparse(request.referrer).path.replace(base_path, '')
+    #     path = urlunparse((parsed_url.scheme, urlparse(base_url).netloc, '/%s%s' % (parsed_url.netloc, parsed_url.path), '', '', ''))
+
     if request.method == 'GET' and request.query_string:
         path = '%s?%s' % (path, request.query_string)
 
     app.logger.debug('try to get content from: %s' % path)
+
+    headers = request.headers
 
     req = urllib2.Request(path, headers=dict([ ('User-Agent', headers.get('User-Agent')) ]))
 
     try:
         app.logger.debug('fetching content...')
         site = urllib2.urlopen(req)
-    except urllib2.HTTPError:
-        return redirect(request.referrer)
+    except:
+        if request.referrer:
+            return redirect(request.referrer)
+
+        abort(404)
 
     content_type = site.headers.get('content-type')
 
@@ -141,10 +163,11 @@ def link(path):
         #app.logger.debug('encode to utf-8')
         #content = decoded.encode('utf-8')
         #app.logger.debug('insert script tag')
-        content = content.replace('</body>', '<script src="%s"></script></body>' % url_for('static', filename='js/core.js'))
 
+        decoded = REG_SOURCE.sub(partial(parse_source_url, base_url=path), decoded)
+        decoded = decoded.replace('</body>', '<script src="%s"></script></body>' % url_for('static', filename='js/core.js'))
 
-    return make_response((content, 200, { 'Content-Type': 'text/html; charset=%s' % charset })) if charset is not None else make_response(content)
+    return make_response((decoded.encode(charset), 200, { 'Content-Type': 'text/html; charset=%s' % charset })) if charset is not None else make_response(content)
 
 @app.route('/record')
 def list_records():
