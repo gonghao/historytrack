@@ -2,7 +2,23 @@
 
 {% block title %}Index{% endblock title %}
 
-{% set index_links = [ ('ghSky', 'http://ghsky.com'), ('Douban', 'http://www.douban.com'), ('Weibo', 'http://weibo.cn') ] %}
+{% block head %}
+    {{ super() }}
+    <!--[if lt IE 9]>
+    <style>
+        .logo { position: static; display: inline-block; *display: inline; *zoom: 1; margin: 20px 0 0 20px; }
+        .link-list { margin-left: 20px; }
+    </style>
+    <![endif]-->
+{% endblock head %}
+
+{% set index_links = [
+        ('ghSky', 'http://ghsky.com'), ('豆瓣', 'http://www.douban.com'), ('新浪微博', 'http://weibo.cn'),
+        ('点点', 'http://www.diandian.com'), ('人人', 'http://www.renren.com'), ('谷歌', 'http://www.google.com'),
+        ('百度', 'http://www.baidu.com'), ('淘宝', 'http://www.taobao.com'), ('天猫', 'http://www.tmall.com'),
+        ('京东', 'http://www.360buy.com'), ('去哪儿', 'http://www.qunar.com')
+    ]
+%}
 
 {% block body %}
     <h1 class="logo"><a href="{{ url_for('index') }}">Index</a></h1>
@@ -15,10 +31,10 @@
         {% endfor %}
     --></ul>
     {% endif %}
-    <nav class="site-nav">
+    <div class="site-nav">
         <ul>
             <li><a href="{{ url_for('list_records') }}">访问记录</a></li>
         </ul>
-    </nav>
+    </div>
     <script>setTimeout(function() { window.scrollTo(0, 1); }, 10);</script>
 {% endblock %}

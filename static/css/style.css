@@ -9,15 +9,15 @@ body { font: 12px/20px arial; }
     position: fixed;
     left: -32px;
     top: 70px;
-}
-
-.logo a {
-    display: block;
     -webkit-transform: rotate(-90deg);
     -moz-transform: rotate(-90deg);
     -ms-transform: rotate(-90deg);
     -o-transform: rotate(-90deg);
     transform: rotate(-90deg);
+}
+
+.logo a {
+    display: block;
     background: #d3351e;
     padding: 10px 20px;
     font-weight: normal;
@@ -36,29 +36,30 @@ body { font: 12px/20px arial; }
 .link-list .link-item {
     display: inline-block;
     padding: 0 10px 10px 0;
+    *display: inline;
+    *zoom: 1;
 }
 
 .link-list .link-item > a {
     display: inline-block;
     width: 150px;
-    height: 150px;
+    height: 50px;
     background: #2ba6e9;
     text-align: center;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
     overflow: hidden;
     word-wrap: break-word;
-    padding-top: 65%;
+    padding-top: 100px;
     font-size: 20px;
     text-decoration: none;
     text-shadow: 2px 1px 1px rgba(0, 0, 0, .2);
+    *display: inline;
+    *zoom: 1;
 }
 
-.link-list .link-item > a:link,
-.link-list .link-item > a:visited,
-.link-list .link-item > a:active,
-.link-list .link-item > a:hover {
+.link-list .link-item a:link,
+.link-list .link-item a:visited,
+.link-list .link-item a:active,
+.link-list .link-item a:hover {
     color: #fff;
 }
 
@@ -69,7 +70,8 @@ body { font: 12px/20px arial; }
 
 .site-nav {
     position: fixed;
-    right: 50px;
+    _position: absolute;
+    right: 20px;
     bottom: 50px;
     width: 80px;
     overflow: hidden;
