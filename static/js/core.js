@@ -22,7 +22,7 @@
             url = location.origin + '/link/' + encodeURIComponent(url);
         }
 
-        return url;
+        return encodeURI(url);
     }
 
     function init() {
