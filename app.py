@@ -38,7 +38,7 @@ def generate_user_id():
 
 def add_track_record(referrer, destination):
     g.db.execute('INSERT INTO `tracks` (`user_id`, `timestamp`, `referrer`, `destination`) VALUES (?, ?, ?, ?)',
-        [ session.get('user'), int(time.time()), referrer, destination ])
+        [ unicode(session.get('user')), int(time.time()), unicode(referrer), unicode(destination) ])
     g.db.commit()
 
 REG_SOURCE = re.compile(r'(href|src)=\s*([\'\"])([^\'\"]+)\2')
@@ -81,6 +81,7 @@ def link(path):
         if m:
             referrer = urllib.unquote_plus(m.group(1))
 
+    path = urllib.unquote_plus(path)
     parsed_url = urlparse(path)
 
     # if not REG_DOMAIN.search(parsed_url.netloc) and request.referrer:

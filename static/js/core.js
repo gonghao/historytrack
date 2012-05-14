@@ -15,11 +15,11 @@
 
         if (hostName === fakeLink.host) {
             if ((pathname = fakeLink.pathname) && pathname.indexOf('/link/') !== 0) {
-                fakeLink.href = location.pathname.replace('/link/', '');
-                url = location.origin + '/link/' + fakeLink.origin + pathname;
+                fakeLink.href = decodeURIComponent(location.pathname).replace('/link/', '');
+                url = location.origin + '/link/' + encodeURIComponent(fakeLink.origin + pathname);
             }
         } else {
-            url = location.origin + '/link/' + url;
+            url = location.origin + '/link/' + encodeURIComponent(url);
         }
 
         return url;

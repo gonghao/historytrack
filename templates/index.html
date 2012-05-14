@@ -16,7 +16,7 @@
         ('ghSky', 'http://ghsky.com'), ('豆瓣', 'http://www.douban.com'), ('新浪微博', 'http://weibo.cn'),
         ('点点', 'http://www.diandian.com'), ('新浪新闻', 'http://news.sina.com.cn'), ('谷歌', 'http://www.google.com'),
         ('百度', 'http://www.baidu.com'), ('淘宝', 'http://www.taobao.com'), ('天猫', 'http://www.tmall.com'),
-        ('京东', 'http://www.360buy.com'), ('去哪儿', 'http://www.qunar.com')
+        ('京东', 'http://www.360buy.com'), ('V2EX', 'http://www.v2ex.com')
     ]
 %}
 
@@ -27,7 +27,7 @@
     {% else %}
     <ul class="link-list"><!--
         {% for link in index_links %}
-        --><li class="link-item"><a href="{{ url_for('link', path=link[1]) }}">{{ link[0] }}</a></li><!--
+        --><li class="link-item"><a href="{{ url_for('link', path=link[1]|urlencode) }}">{{ link[0] }}</a></li><!--
         {% endfor %}
     --></ul>
     {% endif %}

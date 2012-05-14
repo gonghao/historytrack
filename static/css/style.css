@@ -5,6 +5,9 @@ body, h1, ul {
 
 body { font: 12px/20px arial; }
 
+table { table-layout: fixed; }
+td { overflow: hidden; word-wrap: break-word; }
+
 .logo {
     position: fixed;
     left: -32px;
