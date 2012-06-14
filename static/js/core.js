@@ -15,7 +15,7 @@
 
         if (hostName === fakeLink.host) {
             if ((pathname = fakeLink.pathname) && pathname.indexOf('/link/') !== 0) {
-                fakeLink.href = decodeURIComponent(location.pathname).replace('/link/', '');
+                fakeLink.href = typeof __origin_url__ !== 'undefined' ? __origin_url__ : decodeURIComponent(location.pathname).replace('/link/', '');
                 url = location.origin + '/link/' + encodeURIComponent(fakeLink.origin + pathname);
             }
         } else {
