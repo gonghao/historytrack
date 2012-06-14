@@ -42,10 +42,9 @@
             f = forms[i];
 
             f.action = adjustUrl(f.action);
+            console.log(f)
         }
     }
 
-    doc.addEventListener('DOMContentLoaded', function(evt) {
-        init();
-    }, false);
+    init();
 })();

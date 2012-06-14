@@ -166,7 +166,7 @@ def link(path):
         #app.logger.debug('insert script tag')
 
         decoded = REG_SOURCE.sub(partial(parse_source_url, base_url=path), decoded)
-        decoded = decoded.replace('</body>', '<script src="%s"></script></body>' % url_for('static', filename='js/core.js'))
+        decoded = decoded.replace('</body>', '<script>var __origin_url__=\'%s\';</script><script src="%s"></script></body>' % (path, url_for('static', filename='js/core.js')))
 
     return make_response((decoded.encode(charset), 200, { 'Content-Type': 'text/html; charset=%s' % charset })) if charset is not None else make_response(content)
 
