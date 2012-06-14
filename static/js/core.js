@@ -42,7 +42,6 @@
             f = forms[i];
 
             f.action = adjustUrl(f.action);
-            console.log(f)
         }
     }
 
