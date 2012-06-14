@@ -7,8 +7,11 @@ This is an easy python project with Flask.
 ### 网页代理访问地址
 
 使用网页代理访问的形式可以记录页面的访问信息
+
 URI: /link/{dest_url}
+
 Method: Get
+
 Parameter:
 
 *  dest_url: 需要访问的页面完整 URI
