@@ -14,7 +14,13 @@ Method: Get
 
 Parameter:
 
-*  dest_url: 需要访问的页面完整 URI
+*  dest_url: 需要访问的页面完整 URI, 并对 URI 进行编码
+
+例如:
+
+代理访问 http://ghsky.com
+
+则需要生成链接：/link/http%253A%252F%252Fghsky.com
 
 ## Misc
 
