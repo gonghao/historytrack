@@ -5,7 +5,7 @@ from flask import Flask, g, render_template, session, request, make_response, ur
 from jinja2 import Markup
 from urlparse import urlparse, urlunparse, urljoin
 from functools import partial
-import uuid, time, urllib, urllib2, re, sys
+import uuid, time, urllib, urllib2, re, sys, os, json
 
 # configuration
 DATABASE = 'historytrack.db'
@@ -42,6 +42,7 @@ def add_track_record(referrer, destination):
     g.db.commit()
 
 REG_SOURCE = re.compile(r'(href|src)=\s*([\'\"])([^\'\"]+)\2')
+CONFIG_FILE_PATH = os.sep.join([app.config.root_path, 'config', ''])
 
 def parse_source_url(m, base_url=None):
     if base_url is None:
@@ -62,7 +63,18 @@ def teardown_request(exception):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    version = request.args.get('ver', None)
+    index_links = None
+
+    if version and version.isdigit():
+        try:
+            links_json = json.load(file('%s%s.json' % (CONFIG_FILE_PATH, version)), 'utf-8')
+            if len(links_json) > 0:
+                index_links = [ (link['name'], link['url']) for link in links_json ]
+        except Exception, e:
+            app.logger.error(e)
+
+    return render_template('index.html', index_links=index_links)
 
 REG_CHARSET_SIMPLE = re.compile(r'<meta\s*charset\s*=\s*([\"\'])([^\"\']+)\1\s*>')
 REG_CHARSET = re.compile(r'<meta[\s\w=\"\'/;-]+charset=([^\'\"]+)')
