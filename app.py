@@ -31,7 +31,7 @@ def datetimeformat_filter(value, format='%Y年%m月%d日%H:%M'):
     return time.strftime(format, time.localtime(value)).decode('utf-8')
 
 def connect_db():
-    return sqlite3.connect(app.config['DATABASE'])
+    return sqlite3.connect(app.config['DATABASE'], timeout=30)
 
 def generate_user_id():
     return str(uuid.uuid4())
